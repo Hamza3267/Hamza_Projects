@@ -28,7 +28,6 @@ input[type="text"] {
 
 }
 
-
 #btn {
   padding: 10px 20px;
   margin: 10px;
@@ -67,9 +66,17 @@ input[type="text"] {
   color: white;
   border: none;
   border-radius: 10px;
-  cursor: pointer;
+  cursor: pointer; 
+}
 
-  /* margin-left: 200px;  */
+.edit-button {
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 ul {
