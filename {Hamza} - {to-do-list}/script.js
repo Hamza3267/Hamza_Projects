@@ -13,18 +13,18 @@ async function fetchdata() {
       const key=element.id;
       localStorage.setItem(key, JSON.stringify({text:element.title,isMarked:element.completed}));
     })
-    preProcess();
+    // preProcess();
   } catch (error) {
     console.error("Error fetching data:", error);
   }
 }
 fetchdata();
 
-function preProcess() {
-  serverData.forEach((element) => {
-    addTask(element.id, { text: element.title, isMarked: element.completed });
-  });
-}
+// function preProcess() {
+//   serverData.forEach((element) => {
+//     addTask(element.id, { text: element.title, isMarked: element.completed });
+//   });
+// }
 
 // Function to read data from Local Storage
 function readFromDb() {
@@ -88,6 +88,7 @@ function addTask(taskKey, taskData) {
   removeButton.addEventListener("click", () => {
     newTask.remove();
     delete tasks[taskKey];
+    //delete serverData[taskKey];
     localStorage.clear();
     saveTasks();
   });
