@@ -1,18 +1,62 @@
 let input = document.getElementById("inputt");
-let rest = document.getElementById("rst");
+let reset = document.getElementById("rst");
 let txt = document.getElementById("text");
+let tasks = {};
+let serverData = [];
 
-// Load tasks from local storage
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+async function fetchdata() {
+  try {
+    let res = await fetch('https://jsonplaceholder.typicode.com/users/1/todos');
+    let data = await res.json();
+    serverData = [...data];
+    serverData.forEach((element)=>{
+      const key=element.id;
+      localStorage.setItem(key, JSON.stringify({text:element.title,isMarked:element.completed}));
+    })
+    preProcess();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+fetchdata();
 
-// Function to save tasks in local storage
-const saveTasks = () => {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-};
+function preProcess() {
+  serverData.forEach((element) => {
+    addTask(element.id, { text: element.title, isMarked: element.completed });
+  });
+}
+
+// Function to read data from Local Storage
+function readFromDb() {
+  txt.innerHTML = ""; 
+  for (let key in localStorage) {
+    if (localStorage.hasOwnProperty(key)) {
+      const taskData = JSON.parse(localStorage.getItem(key));
+      addTask(key, taskData);
+      tasks[key] = taskData; // Add the task to the tasks object.
+    }
+  }
+}
+
+// Function to save tasks to Local Storage
+function saveTasks() {
+  for (let key in tasks) {
+    localStorage.setItem(key, JSON.stringify(tasks[key]));
+  }
+}
+
+// Function to generate a unique key for tasks
+function generateUniqueKey() {
+  let key;
+  do {
+    key = Math.floor(Math.random() * 1000) + 1;
+  } while (tasks.hasOwnProperty(key)); // Ensure the key is unique.
+  return key.toString();
+}
 
 // Function to add a task
-const addTask = (taskText, isMarked) => {
-  let newVar = document.createElement("ul");
+function addTask(taskKey, taskData) {
+  let newTask = document.createElement("ul");
 
   var removeButton = document.createElement("button");
   removeButton.textContent = "Remove";
@@ -27,89 +71,79 @@ const addTask = (taskText, isMarked) => {
   editButton.classList.add("edit-button");
 
   const taskContent = document.createElement("li");
-  taskContent.textContent = taskText;
+  taskContent.textContent = taskData.text;
 
-  if (isMarked) {
-    newVar.classList.add("marked");
+  if (taskData.isMarked) {
+    newTask.classList.add("marked");
     editButton.remove();
     removeButton.remove();
   }
 
-  newVar.appendChild(taskContent);
-  newVar.appendChild(markButton);
-  newVar.appendChild(editButton);
-  newVar.appendChild(removeButton);
-  txt.appendChild(newVar);
+  newTask.appendChild(taskContent);
+  newTask.appendChild(markButton);
+  newTask.appendChild(editButton);
+  newTask.appendChild(removeButton);
+  txt.appendChild(newTask);
 
   removeButton.addEventListener("click", () => {
-    newVar.remove();
-    const index = tasks.findIndex((item) => item.text === taskText);
-    if (index !== -1) {
-      tasks.splice(index, 1);
-      saveTasks();
-    }
+    newTask.remove();
+    delete tasks[taskKey];
+    localStorage.clear();
+    saveTasks();
   });
 
   markButton.addEventListener("click", () => {
-    newVar.classList.add("marked");
+    newTask.classList.add("marked");
     editButton.remove();
     removeButton.remove();
-    // Update the marked status in the tasks array
-    const index = tasks.findIndex((item) => item.text === taskText);
-    if (index !== -1) {
-      tasks[index].isMarked = true;
-      saveTasks();
-    }
+    taskData.isMarked = true;
+    saveTasks();
   });
 
   editButton.addEventListener("click", () => {
     const inputField = document.createElement("input");
     inputField.type = "text";
-    inputField.value = taskText;
+    inputField.value = taskData.text;
 
-    newVar.replaceChild(inputField, taskContent);
+    newTask.replaceChild(inputField, taskContent);
 
     inputField.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         const updatedTask = inputField.value;
         if (updatedTask.trim() !== "") {
           taskContent.textContent = updatedTask;
-          // Update the task in the tasks array
-          const index = tasks.findIndex((item) => item.text === taskText);
-          if (index !== -1) {
-            tasks[index].text = updatedTask;
-            saveTasks();
-          }
-
-          newVar.replaceChild(taskContent, inputField);
+          taskData.text = updatedTask;
+          saveTasks();
+          newTask.replaceChild(taskContent, inputField);
         }
       }
     });
   });
-};
+}
 
 // Load tasks from local storage and render
-tasks.forEach((task) => {
-  addTask(task.text, task.isMarked);
-});
+readFromDb();
 
 // Event listener to add a new task
 input.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" && input.value !== "") {
+  if (event.key === "Enter" && input.value.trim() !== "") {
+    const taskKey = generateUniqueKey();
     const newTask = {
       text: input.value,
-      isMarked: false
+      isMarked: false,
+      
     };
-    tasks.push(newTask);
+    tasks[taskKey] = newTask;
     saveTasks();
-    addTask(input.value, false);
+    addTask(taskKey, newTask);
     input.value = "";
   }
 });
 
 // Event listener to reset tasks
-rest.addEventListener("click", () => {
-  txt.innerHTML = "";
-  tasks = [];
-  saveTasks();
+reset.addEventListener("click", () => {
+  txt.innerHTML ="";
+  tasks = {};
+  localStorage.clear(); // Clear all data in local storage.
 });
+
