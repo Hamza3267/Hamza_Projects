@@ -1,0 +1,139 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+body{
+    background-color: rgb(12, 12, 12);
+}
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    color:gray;
+}
+.logo span{
+    font-size: 30px;
+}
+ #lee {
+  display: flex;
+  padding: 10px 5px;
+  list-style: none;
+}
+li{
+    margin: 10px;
+}
+.image img{
+   
+    margin-left:550px;
+    width: 11%;
+
+}
+.image p{
+    color: #ff7575;
+    font-family: 'Sedgwick Ave Display', cursive;
+    margin-left:300px;
+    font-size: 56px;
+    margin-bottom: 30px;
+
+}
+.image span{
+    color: whitesmoke; 
+    margin-left:400px;
+    font-size: 25px;
+   
+   
+
+}
+.new1 {
+    border-top: 1px solid rgb(70, 70, 70);
+    height: 2px;
+    margin-top: 50px;
+  }
+.navbar ul{
+    margin-left: 300px;
+    align-items: center;
+  }
+  .navbar li{
+   cursor: pointer;
+  
+
+  }
+  .navv li{
+    cursor: pointer;
+   }
+.imagess img{
+    width: 13px;
+}
+.container{
+    padding: 0px 150px;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    row-gap: 30px;
+    margin: 30px auto;
+}
+.card{
+    background-color: white;
+    padding: 2px 16px;
+    width: 250px;
+    height: 300px;
+    border-radius: 20px;
+    margin: 10px;
+   
+}
+.card p{
+    /* font-size: small; */
+    text-overflow: ellipsis;
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap; 
+  /* width: 50px; */
+}
+/* .card p:hover {
+    overflow: visible;
+  } */
+.card img{
+    width:250px;
+    height: 200px;
+    border-radius: 15px;
+    
+}
+.cont {
+    display: flex;
+   /* margin-top: 20px; */
+    justify-content: space-between;
+}
+
+.cont p{
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between; 
+    font-weight: bold;
+}
+#lea{
+    display: flex;
+    padding: 10px 5px;
+    list-style: none;
+    margin-left: 450px;
+}
+.loggo{
+    color: azure;
+    display: flex;
+    margin: 10px;
+    align-items: center;
+}
+.loggo span{
+    font-size: 13px;
+    margin: 10px;
+    background-color: rgb(112, 212, 245);
+}
+.last{
+    display: flex;
+    margin-left: 1100px;   
+}
+.last p{
+    color: white;
+    background-color: aqua;
+    font-size: small;
+   
+}
